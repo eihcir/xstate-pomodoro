@@ -2,29 +2,19 @@ export interface TimerContext {
 	offSet: number;
 	elapsed: number;
 	duration: number;
-	interval: number;
 	startTime: number;
 }
 
 export enum TimerStatus {
-	Idle = 'idle',
 	Running = 'running',
 	Paused = 'paused',
+	Done = 'done',
+	Idle = 'idle'
 }
 
 export type TimerEvent =
 	| {
-			type: 'START';
-	  }
-	| {
-			type: 'DURATION.UPDATE';
-			value: number;
-	  }
-	| {
 			type: 'TICK';
-	  }
-	| {
-			type: 'RESET';
 	  }
 	| {
 			type: 'PAUSE';
@@ -33,23 +23,28 @@ export type TimerEvent =
 			type: 'UNPAUSE';
 	  };
 
-export type TimerState =
-	| {
-			value: TimerStatus.Running;
-			context: TimerContext & { elapsed: number; duration: number };
-	  }
-	| {
-			value: TimerStatus.Paused;
-			context: TimerContext & {
-				elapsed: number;
-				duration: number;
-				interval: number;
-			};
-	  }
-	| {
-			value: TimerStatus.Idle;
-			context: TimerContext;
-	  };
+
+export interface TimerSchema {
+	states: {
+		[TimerStatus.Running]: {};
+		[TimerStatus.Paused]: {};
+		[TimerStatus.Done]: {};
+	};
+}
+
+// export type TimerState = SubState &
+// 	{
+// 			value: TimerStatus.Running;
+// 			context: TimerContext;
+// 	  }
+// 	| {
+// 			value: TimerStatus.Paused;
+// 			context: TimerContext;
+// 	  }
+// 	| {
+// 			value: TimerStatus.Done;
+// 			context: TimerContext;
+// 	  };
 
 export type CreateTimerServiceOptions = {
 	duration: number;
